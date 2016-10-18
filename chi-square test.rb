@@ -4,7 +4,8 @@ require 'win32ole'
 require 'Statistics2'
 
 BEGIN{
-    path='test.bmp'
+    puts "give me the name of bmp picture"
+	  path=gets.chomp()
 	if File.exist?(path)
 		Picture=open(path,'rb')
 	else
@@ -17,6 +18,10 @@ BEGIN{
    #puts Picture.size()
    Picture.each_byte {|ch| content<<ch}
    #puts content
+   if content[0]!=0x42||content[1]!=0x4d
+		puts "not bmp"
+		exit()
+	end
    psize=content.size()
    doffset=content[10]|(content[11]<<8)|(content[12]<<16)|(content[13]<<24)
    dsize=psize-doffset
@@ -33,8 +38,8 @@ BEGIN{
    #puts url.size()
    #puts url
    ie = WIN32OLE.new('InternetExplorer.Application')
-   #ie.visible = true
-   #ie.navigate(url)
+   ie.visible = true
+   ie.navigate(url)
    i=0
    sum=0
    while(i<256)
